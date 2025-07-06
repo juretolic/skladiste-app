@@ -54,7 +54,4 @@ static/
 - `POST /stock/entry` - Dodaj robu
 - `GET /stock/list` - Lista robe
 - `DELETE /stock/delete/{id}` - Obriši unos
-
-## Autori
-
-Student - Upravljanje podacima 2024 
+ 
