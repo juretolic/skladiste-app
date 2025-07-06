@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+aiomysql
+redis
+python-jose
+passlib[bcrypt]
+python-dotenv
+aiofiles
+python-multipart
+cryptography
+pytz
+bcrypt==4.0.1

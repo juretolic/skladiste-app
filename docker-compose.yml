@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # MySQL baza podataka
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: skladiste
+      MYSQL_USER: skladiste_user
+      MYSQL_PASSWORD: skladiste_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - skladiste-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - skladiste-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      timeout: 10s
+      retries: 5
+
+  # FastAPI aplikacija
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=mysql+pymysql://skladiste_user:skladiste_pass@mysql:3306/skladiste
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=your-secret-key-here
+    volumes:
+      - ./static:/app/static
+    networks:
+      - skladiste-network
+    restart: always
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  skladiste-network:
+    driver: bridge 
