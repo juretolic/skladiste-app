@@ -10,7 +10,7 @@ Jednostavna aplikacija za upravljanje skladištem napravljena s FastAPI i Docker
 - Brisanje i uređivanje unosa
 - Admin može vidjeti sve, obični korisnici samo svoje
 
-## Kako pokrenuti
+## Kako pokrenuti lokalno
 
 ```bash
 # Kloniraj projekt
@@ -20,6 +20,34 @@ cd skladiste-app
 # Pokreni s Docker
 docker-compose up --build
 ```
+
+## Deployment na Oracle Cloud
+
+### 1. Kreiraj VM na Oracle Cloud
+- Otvori Oracle Cloud Console
+- Kreiraj novu VM instancu (Ubuntu 22.04)
+- Otvori port 80 u Security List
+
+### 2. Poveži se s VM-om
+```bash
+ssh ubuntu@your-vm-ip
+```
+
+### 3. Kloniraj projekt
+```bash
+git clone https://github.com/juretolic/skladiste-app.git
+cd skladiste-app
+```
+
+### 4. Pokreni deployment
+```bash
+chmod +x deploy.sh
+./deploy.sh
+```
+
+### 5. Pristup aplikaciji
+- **Web**: http://your-vm-ip
+- **API docs**: http://your-vm-ip/docs
 
 ## Pristup aplikaciji
 
@@ -43,8 +71,13 @@ app/
 ├── stock.py         # Skladište API
 ├── models.py        # Baza podataka
 └── schemas.py       # Podaci
+
 static/
 └── index.html       # Frontend
+
+docker-compose.yml   # Lokalno pokretanje
+docker-compose.prod.yml  # Produkcija
+deploy.sh           # Deployment skripta
 ```
 
 ## API
